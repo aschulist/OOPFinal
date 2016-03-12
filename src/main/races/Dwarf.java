@@ -1,5 +1,8 @@
 package main.races;
 
+import java.util.Random;
+
+import main.Gender;
 import main.classes.ClassType;
 import main.races.Race;
 
@@ -49,7 +52,7 @@ public class Dwarf extends Race{
 			+ " bodies that account for their burly appearance. Male and female dwarves pride themselves on the length of their hair, and men\n"
 			+ " often decorate their beards with a variety of clasps and intricate braids. A clean-shaven male dwarf is a sure sign of madness,\n"
 			+ " or worse—no one familiar with their race trusts a beardless dwarf.\n\n"
-			+ " Society Description: = The great distances between their mountain citadels account for many of the cultural differences that\n"
+			+ " Society Description: The great distances between their mountain citadels account for many of the cultural differences that\n"
 			+ " exist within dwarven society. Despite these schisms, dwarves throughout the world are characterized by their love of stonework,\n"
 			+ " their passion for stone- and metal-based craftsmanship and architecture, and a fierce hatred of giants, orcs, and goblinoids\n\n."
 			+ "	Relation Description: Dwarves and orcs have long dwelt in proximity, theirs a history of violence as old as both their races.\n"
@@ -64,8 +67,9 @@ public class Dwarf extends Race{
 			+ " of their birth, or to reclaim fallen dwarven citadels from racial enemies. Dwarven warfare is often characterized by tunnel fighting\n"
 			+ " and melee combat, and as such most dwarves tend toward classes such as fighters and barbarians.";
 	
-	private static String[] racialTraits = {" Medium: Dwarves are Medium creatures and receive no bonuses or penalties due to their size.", 
-			" Medium: Dwarves are Medium creatures and receive no bonuses or penalties due to their size.", 
+	private static String[] racialTraits = {
+			" +2 Constitution, +2 Wisdom, –2 Charisma: Dwarves are both tough and wise, but also a bit gruff." ,
+			" Medium: Dwarves are Medium creatures and receive no bonuses or penalties due to their size.",
 			" Darkvision: Dwarves can see in the dark up to 60 feet.",
 			" Defensive Training: Dwarves gain a +4 dodge bonus to AC against monsters of the giant subtype.", 
 			" Greed: Dwarves gain a +2 racial bonus on Appraise checks made to determine the price of nonmagical goods that contain precious metals or gemstones.",
@@ -84,18 +88,107 @@ public class Dwarf extends Race{
 	@Override
 	public void calculateAge(ClassType type) {
 		// TODO Auto-generated method stub
-		
+		Random rand = new Random();
+		int age = 40;
+		switch(type){
+		case BARBARIAN:
+		case ORACLE:
+		case ROGUE:
+		case SORCERER:
+		case BLOODRAGER:
+		case INVESTIGATOR:
+		case NINJA:
+			for(int i = 0; i < 3; i++){
+				age += rand.nextInt(6) + 1;
+			}
+			break;
+		case BARD:
+		case CAVALIER:
+		case FIGHTER:
+		case GUNSLINGER:
+		case PALADIN:
+		case RANGER:
+		case SUMMONER:
+		case WITCH:
+		case BRAWLER:
+		case HUNTER:
+		case SHAMAN:
+		case SLAYER:
+		case SWASHBUCKLER:
+		case SAMURAI:
+			for(int i = 0; i < 5; i++){
+				age += rand.nextInt(6) + 1;
+			}
+			break;
+		case ALCHEMIST:
+		case CLERIC:
+		case DRUID:
+		case INQUISITOR:
+		case MAGNUS:
+		case WIZARD:
+		case ARCANIST:
+		case SKALD:
+		case WARPRIEST:
+		case KINETICIST:
+		case MEDIUM:
+		case MESMERIST:
+		case OCCULTIST:
+		case PSYCHIC:
+		case SPIRITUALIST:
+			for(int i = 0; i < 7; i++){
+				age += rand.nextInt(6) + 1;
+			}
+			break;
+		}
+		super.setAge(age);
 	}
 
 	@Override
-	public void calculateHeight() {
+	public void calculateHeight(Gender g) {
 		// TODO Auto-generated method stub
-		
+		int baseFt = 0;
+		int baseIn = 0;
+		switch(g){
+		case MALE:
+			baseFt = 3;
+			baseIn = 9;
+			break;
+		case FEMALE:
+			baseFt = 3;
+			baseIn = 7;
+			break;
+		}
+		int addedInches = 0;
+		Random rand = new Random();
+		for(int i = 0; i < 2; i++){
+			addedInches += (rand.nextInt(4) + 1);
+		}
+		System.out.println(addedInches);
+		calculateWeight(g, addedInches);
+		int heightFt = baseFt;
+		int heightIn = baseIn + addedInches;
+		while(heightIn >= 12){
+			heightIn -= 12;
+			heightFt += 1;
+		}
+		System.out.println(heightFt);
+		System.out.println(heightIn);
+		super.setHeight(heightFt, heightIn);
 	}
 
 	@Override
-	public void calculateWeight() {
+	public void calculateWeight(Gender g, int addedInches) {
 		// TODO Auto-generated method stub
-		
+		int baseWeight = 0;
+		switch(g){
+		case MALE:
+			baseWeight = 150;
+			break;
+		case FEMALE:
+			baseWeight = 120;
+			break;
+		}
+		int weight = baseWeight + (addedInches * 7);
+		super.setWeight(weight);
 	}
 }
